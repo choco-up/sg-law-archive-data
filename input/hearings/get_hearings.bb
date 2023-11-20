@@ -7,10 +7,10 @@
             [cheshire.core :as json]
             [input.utils.general :as utils]
             [input.hearings.populate_hearing_data :refer [populate-hearing-data]])
-  (:import [java.time.LocalDateTime]
-           [java.time.format DateTimeFormatter]
-           [java.time.temporal.ChronoUnit])
+  (:import [java.time LocalDateTime]
+           [java.time.format DateTimeFormatter])
   (:gen-class))
+
 
 (pods/load-pod 'retrogradeorbit/bootleg "0.1.9")
 
@@ -21,23 +21,18 @@
 
 (defn- make-request-body
   ([] (make-request-body 0))
-  ([page]
-   (let [now (LocalDateTime/now)
-         start-date (-> now (.minusDays 14))
-         end-date (-> now (.plusDays 365))
-         formatter (DateTimeFormatter/ofPattern "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")]
-     {:model {:CurrentPage page
-              :SelectedCourtTab ""
-              :SearchKeywords ""
-              :SearchKeywordsGrouping ""
-              :SelectedCourt ""
-              :SelectedLawFirms []
-              :SelectedJudges []
-              :SelectedHearingTypes []
-              :SelectedStartDate (.format formatter start-date)
-              :SelectedEndDate (.format formatter end-date)
-              :SelectedPageSize 500
-              :SelectedSortBy ""}})))
+  ([page] {:model {:CurrentPage page
+                   :SelectedCourtTab ""
+                   :SearchKeywords ""
+                   :SearchKeywordsGrouping ""
+                   :SelectedCourt ""
+                   :SelectedLawFirms []
+                   :SelectedJudges []
+                   :SelectedHearingTypes []
+                   :SelectedStartDate "2022-01-31T15:59:00.000Z"
+                   :SelectedEndDate "2099-01-31T15:59:00.000Z"
+                   :SelectedPageSize 500
+                   :SelectedSortBy ""}}))
 
 (defn- get-hearing-list-page-raw
   [page]

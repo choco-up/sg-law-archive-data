@@ -38,7 +38,7 @@
               :SelectedStartDate (.format formatter start-date)
               :SelectedEndDate (.format formatter end-date)
               :SelectedPageSize 500
-              :SelectedSortBy ""}}))
+              :SelectedSortBy ""}})))
 
 (defn- get-hearing-list-page-raw
   [page]

@@ -7,8 +7,7 @@
             [cheshire.core :as json]
             [input.utils.general :as utils]
             [input.hearings.populate_hearing_data :refer [populate-hearing-data]])
-  (:import [java.time LocalDateTime]
-           [java.time.ZoneId]
+  (:import [java.time.LocalDateTime]
            [java.time.format DateTimeFormatter]
            [java.time.temporal.ChronoUnit])
   (:gen-class))
@@ -23,9 +22,9 @@
 (defn- make-request-body
   ([] (make-request-body 0))
   ([page]
-   (let [now (LocalDateTime/now (ZoneId/of "Z"))
-         start-date (-> now (.minus 14 ChronoUnit/DAYS))
-         end-date (-> now (.plus 365 ChronoUnit/DAYS))
+   (let [now (LocalDateTime/now)
+         start-date (-> now (.minusDays 14))
+         end-date (-> now (.plusDays 365))
          formatter (DateTimeFormatter/ofPattern "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")]
      {:model {:CurrentPage page
               :SelectedCourtTab ""

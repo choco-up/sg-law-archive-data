@@ -62,7 +62,7 @@
 
 (defn populate-hearing-data [hearings]
   (map #(try
-          (Thread/sleep 5000)
+          (Thread/sleep 1000)
           (->> % :link
                (get-hearing-detail-raw)
                (parse-hearing-detail)

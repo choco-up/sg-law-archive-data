@@ -29,8 +29,8 @@
                    :SelectedLawFirms []
                    :SelectedJudges []
                    :SelectedHearingTypes []
-                   :SelectedStartDate nil
-                   :SelectedEndDate nil
+                   :SelectedStartDate "2022-01-31T15:59:00.000Z"
+                   :SelectedEndDate "2099-01-31T15:59:00.000Z"
                    :SelectedPageSize 500
                    :SelectedSortBy ""}}))
 

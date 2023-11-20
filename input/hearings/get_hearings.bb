@@ -8,7 +8,9 @@
             [input.utils.general :as utils]
             [input.hearings.populate_hearing_data :refer [populate-hearing-data]])
   (:import [java.time LocalDateTime]
-           [java.time.format DateTimeFormatter])
+           [java.time.ZoneId]
+           [java.time.format DateTimeFormatter]
+           [java.time.temporal.ChronoUnit])
   (:gen-class))
 
 
@@ -21,18 +23,23 @@
 
 (defn- make-request-body
   ([] (make-request-body 0))
-  ([page] {:model {:CurrentPage page
-                   :SelectedCourtTab ""
-                   :SearchKeywords ""
-                   :SearchKeywordsGrouping ""
-                   :SelectedCourt ""
-                   :SelectedLawFirms []
-                   :SelectedJudges []
-                   :SelectedHearingTypes []
-                   :SelectedStartDate nil
-                   :SelectedEndDate nil
-                   :SelectedPageSize 500
-                   :SelectedSortBy ""}}))
+  ([page]
+   (let [now (LocalDateTime/now (ZoneId/of "Z"))
+         start-date (-> now (.minus 14 ChronoUnit/DAYS))
+         end-date (-> now (.plus 365 ChronoUnit/DAYS))
+         formatter (DateTimeFormatter/ofPattern "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")]
+     {:model {:CurrentPage page
+              :SelectedCourtTab ""
+              :SearchKeywords ""
+              :SearchKeywordsGrouping ""
+              :SelectedCourt ""
+              :SelectedLawFirms []
+              :SelectedJudges []
+              :SelectedHearingTypes []
+              :SelectedStartDate (.format formatter start-date)
+              :SelectedEndDate (.format formatter end-date)
+              :SelectedPageSize 500
+              :SelectedSortBy ""}}))
 
 (defn- get-hearing-list-page-raw
   [page]

@@ -3,28 +3,34 @@ name: Obtain latest hearings data
 on:
   workflow_dispatch:
   schedule:
-    - cron: '25 1 * * *' # 1:25 AM GMT, which is 09:25 AM GMT+8
+    - cron: '25 0 * * *' # 0:25 AM GMT, which is 08:25 AM GMT+8
 
 jobs:
   hearings:
     runs-on: ubuntu-latest
     steps:
-    - name: Check out this repo
-      uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
-    - name: Setup Babashka
-      uses: turtlequeue/setup-babashka@v1.5.2
-      with:
-        babashka-version: 1.3.186
-    - name: Fetch latest data
-      run: bb --main input.hearings.get_hearings
-    - name: Commit and push if it changed
-      run: |-
-        git config user.name "Automated update"
-        git config user.email "actions@users.noreply.github.com"
-        git add -A
-        timestamp=$(TZ='Asia/Singapore' date)
-        git commit -m "Latest hearings data: ${timestamp}" || exit 0
-        git pull --rebase
-        git push
+      - name: Check out this repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9' # Specify the Python version you need
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Fetch latest data
+        run: python input/hearings/get_hearings.py
+
+      - name: Commit and push if it changed
+        run: |-
+          git config user.name "Automated update"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          timestamp=$(TZ='Asia/Singapore' date)
+          git commit -m "Latest hearings data: ${timestamp}" || exit 0
+          git pull --rebase
+          git push

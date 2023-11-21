@@ -62,13 +62,13 @@
 
 (defn populate-hearing-data [hearings]
   (map #(try
-          (Thread/sleep 1000)
           (->> % :link
                (get-hearing-detail-raw)
                (parse-hearing-detail)
                (merge %))
           (catch Exception e
-            (println (str "Caught exception: "
-                          (.getMessage e)))
+            (println (str "Caught exception: " (.getMessage e)))
+            (Thread/sleep 5000)
             %))
        hearings))
+

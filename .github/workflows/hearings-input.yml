@@ -3,7 +3,7 @@ name: Obtain latest hearings data
 on:
   workflow_dispatch:
   schedule:
-    - cron: '25 0 * * *' # 0:25 AM GMT, which is 08:25 AM GMT+8
+    - cron: '0 19 * * *' # 7:00 PM GMT, which is 3:00 AM GMT+8
 
 jobs:
   hearings:

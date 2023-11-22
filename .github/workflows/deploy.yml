@@ -9,6 +9,8 @@ on:
       - '.github/workflows/deploy.yml'
       - 'docker/**'
       - 'data/**'
+  schedule:
+    - cron: '0 1 * * *' # 1:00 AM GMT, which is 9:00 AM GMT+8
 
 jobs:
   deploy:

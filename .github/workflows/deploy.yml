@@ -67,7 +67,7 @@ jobs:
       - name: Deploy image to Amazon EKS
         env:
           KUBE_CONFIG: ${{ secrets.KUBE_CONFIG_STAGING }}
-          KUBE_NAMESPACE: dev
+          KUBE_NAMESPACE: production
           KUBE_DEPLOYMENT: sg-law-archive-data
           KUBE_IMAGE: ${{ steps.build-image.outputs.image }}
         run: |

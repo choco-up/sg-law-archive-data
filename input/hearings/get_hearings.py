@@ -12,7 +12,7 @@ URL = "https://www.judiciary.gov.sg/hearing-list/GetFilteredList"
 JSON_FILE = "data/hearings.json"
 
 # Set the start and end dates when the script is first run
-selected_start_date = (datetime.now() - timedelta(days=2)).strftime("%Y-%m-%dT%H:%M:%S.000Z")
+selected_start_date = (datetime.now() - timedelta(days=3)).strftime("%Y-%m-%dT%H:%M:%S.000Z")
 selected_end_date = (datetime.now() + timedelta(days=365)).strftime("%Y-%m-%dT%H:%M:%S.000Z")
 
 
@@ -86,10 +86,17 @@ def get_hearing_list():
     return hearings
 
 
+def remove_duplicates(hearings):
+    unique_hearings = {}
+    for hearing in hearings:
+        unique_hearings[hearing['link']] = hearing
+    return list(unique_hearings.values())
+
+
 def main():
     hearings = get_hearing_list()
     # populate_hearing_data would be a separate function or module to process 'hearings' data
-    processed_data = populate_hearing_data(hearings)
+    processed_data = remove_duplicates(populate_hearing_data(hearings))
     with open(JSON_FILE, 'w') as f:
         json.dump(processed_data, f)
 

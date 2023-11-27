@@ -49,13 +49,13 @@ def parse_hearing_detail(html):
 def populate_hearing_data(hearings):
     populated_data = []
     for hearing in hearings:
+        link = hearing['link']
         try:
-            link = hearing['link']
             detail_raw = get_hearing_detail_raw(link)
             parsed_details = parse_hearing_detail(detail_raw)
             populated_data.append({**hearing, **parsed_details})
             print(link)
         except Exception as e:
-            print(f"Caught exception: {e}")
+            print(f"Caught exception: {e} {link}")
             time.sleep(3)
     return populated_data

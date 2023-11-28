@@ -6,8 +6,11 @@ on:
     branches:
       - main
     paths:
+      - '.github/workflows/deploy.yml'
       - 'docker/**'
       - 'data/**'
+  schedule:
+    - cron: '0 1 * * *' # 1:00 AM GMT, which is 9:00 AM GMT+8
 
 jobs:
   deploy:
@@ -37,7 +40,36 @@ jobs:
           key: cache-${{ hashFiles('input/**') }}-${{ hashFiles('scripts/**') }}
       - name: Generate db
         run: bb --main scripts.build-db
-      - uses: superfly/flyctl-actions/setup-flyctl@master
-      - run: flyctl deploy --remote-only --wait-timeout 1200
+
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1.7.0
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build, tag, and push image to Amazon ECR
+        id: build-image
         env:
-          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY: sg-law-archive-data
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -f docker/prod.Dockerfile -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
+      - name: Deploy image to Amazon EKS
+        env:
+          KUBE_CONFIG: ${{ secrets.KUBE_CONFIG_STAGING }}
+          KUBE_NAMESPACE: production
+          KUBE_DEPLOYMENT: sg-law-archive-data
+          KUBE_IMAGE: ${{ steps.build-image.outputs.image }}
+        run: |
+          echo "$KUBE_CONFIG" | base64 -d > kubeconfig.yml
+          kubectl --kubeconfig=kubeconfig.yml -n $KUBE_NAMESPACE set image deployment/$KUBE_DEPLOYMENT $KUBE_DEPLOYMENT=$KUBE_IMAGE

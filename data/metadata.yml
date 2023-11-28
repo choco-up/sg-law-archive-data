@@ -1,6 +1,6 @@
-title: LacunaDB
-about: hueyy/lacuna-db
-about_url: https://github.com/hueyy/lacuna-db
+title: SG Law Archive Data
+about: choco-up/sg-law-archive-data
+about_url: https://sg-law-archive-data.choco-up.com
 extra_css_urls:
   - https://code.cdn.mozilla.net/fonts/fira.css
   - /assets/main.css
@@ -46,7 +46,7 @@ databases:
         hidden: true
       pdpc_undertakings_changed:
         hidden: true
-      pdpc_undertakings_version: 
+      pdpc_undertakings_version:
         hidden: true
       sc:
         source: sal.org.sg/Services/Appointments/Senior-Counsel/Directory
@@ -724,6 +724,6 @@ plugins:
             encoding:
               x: { field: timestamp, type: temporal, timeUnit: yearmonthdate }
               y: { field: count, type: quantitative }
-              href: 
+              href:
                 field: url
                 type: nominal

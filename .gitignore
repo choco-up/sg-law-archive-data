@@ -8,6 +8,7 @@ bootleg
 *.db
 *.db-journal
 *.pdf
+.DS_Store
 
 # Binaries
 /mergestat
@@ -18,5 +19,23 @@ bootleg
 .venv
 .vscode
 
+.idea
+
 # Local Netlify folder
 .netlify
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt

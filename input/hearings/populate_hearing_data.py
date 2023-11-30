@@ -57,5 +57,4 @@ def populate_hearing_data(hearings):
             print(link)
         except Exception as e:
             print(f"Caught exception: {e} {link}")
-            time.sleep(3)
     return populated_data

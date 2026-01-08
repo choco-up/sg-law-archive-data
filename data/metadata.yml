@@ -4,6 +4,8 @@ about_url: https://sg-law-archive-data.choco-up.com
 extra_css_urls:
   - https://code.cdn.mozilla.net/fonts/fira.css
   - /assets/main.css
+settings:
+  sql_time_limit_ms: 30000
 databases:
   data:
     tables:
@@ -200,10 +202,10 @@ plugins:
           name: Date End
           type: date
       layout:
-       - [financial-penalties, enforcement-action-types]
-       - [financial-penalties, obligation-types]
-       - [enforcement-count, most-recent-enforcement]
-       - [total-financial-penalties, highest-financial-penalties]
+        - [financial-penalties, enforcement-action-types]
+        - [financial-penalties, obligation-types]
+        - [enforcement-count, most-recent-enforcement]
+        - [total-financial-penalties, highest-financial-penalties]
       charts:
         enforcement-count:
           title: Enforcement action over time
@@ -533,7 +535,7 @@ plugins:
         total-financial-penalties:
           title: Total financial penalties imposed over time
           db: data
-          query: >- 
+          query: >-
             SELECT
               SUM(amount) OVER (
                 ORDER BY

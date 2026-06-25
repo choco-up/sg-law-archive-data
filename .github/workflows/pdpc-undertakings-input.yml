@@ -3,43 +3,43 @@ name: Obtain latest PDPC undertakings data
 on:
   workflow_dispatch:
   schedule:
-    - cron: '31 18 * * 2,4,6' # 2.31AM GMT+8 every Tues, Thurs, and Sat
+    - cron: "31 18 * * 2,4,6" # 2.31AM GMT+8 every Tues, Thurs, and Sat
 
 jobs:
   pdpc-undertakings:
     runs-on: ubuntu-latest
     steps:
-    - name: Check out this repo
-      uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
-    - uses: actions/setup-python@v4
-      with:
-        python-version: '3.12'
-    - uses: abatilo/actions-poetry@v2
-      with:
-        poetry-version: '1.2.2'
-    - name: Install dependencies
-      run: poetry install --no-interaction --no-root
-    - name: Setup Babashka
-      uses: turtlequeue/setup-babashka@v1.5.2
-      with:
-        babashka-version: 1.3.186
-    - name: Install pdftotext
-      run: |-
-        sudo apt-get update && \
-        sudo apt-get install -y \
-          poppler-utils \
-          tesseract-ocr \
-          ghostscript
-    - name: Fetch latest data
-      run: bb --main input.pdpc.undertakings
-    - name: Commit and push if it changed
-      run: |-
-        git config user.name "Automated update"
-        git config user.email "actions@users.noreply.github.com"
-        git add -A
-        timestamp=$(TZ='Asia/Singapore' date)
-        git commit -m "Latest PDPC undertakings data: ${timestamp}" || exit 0
-        git pull --rebase
-        git push
+      - name: Check out this repo
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.12"
+      - uses: abatilo/actions-poetry@v2
+        with:
+          poetry-version: "1.2.2"
+      - name: Install dependencies
+        run: poetry install --no-interaction --no-root
+      - name: Setup Babashka
+        uses: turtlequeue/setup-babashka@v1.5.2
+        with:
+          babashka-version: 1.3.186
+      - name: Install pdftotext
+        run: |-
+          sudo apt-get update && \
+          sudo apt-get install -y \
+            poppler-utils \
+            tesseract-ocr \
+            ghostscript
+      - name: Fetch latest data
+        run: bb --main input.pdpc.undertakings
+      - name: Commit and push if it changed
+        run: |-
+          git config user.name "Automated update"
+          git config user.email "actions@users.noreply.github.com"
+          git add -A
+          timestamp=$(TZ='Asia/Singapore' date)
+          git commit -m "Latest PDPC undertakings data: ${timestamp}" || exit 0
+          git pull --rebase
+          git push

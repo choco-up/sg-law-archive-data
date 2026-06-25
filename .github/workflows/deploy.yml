@@ -6,11 +6,11 @@ on:
     branches:
       - main
     paths:
-      - '.github/workflows/deploy.yml'
-      - 'docker/**'
-      - 'data/**'
+      - ".github/workflows/deploy.yml"
+      - "docker/**"
+      - "data/**"
   schedule:
-    - cron: '0 1 * * *' # 1:00 AM GMT, which is 9:00 AM GMT+8
+    - cron: "0 1 * * *" # 1:00 AM GMT, which is 9:00 AM GMT+8
 
 jobs:
   deploy:
@@ -22,10 +22,10 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.12'
+          python-version: "3.12"
       - uses: abatilo/actions-poetry@v2
         with:
-          poetry-version: '1.2.2'
+          poetry-version: "1.2.2"
       - name: Install dependencies
         run: poetry install --no-interaction --no-root
       - name: Setup Babashka
@@ -40,7 +40,6 @@ jobs:
           key: cache-${{ hashFiles('input/**') }}-${{ hashFiles('scripts/**') }}
       - name: Generate db
         run: bb --main scripts.build-db
-
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1.7.0
